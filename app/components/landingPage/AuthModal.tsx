@@ -29,9 +29,9 @@ export default function AuthModal() {
               height={50}
               className="size-10"
             />
-            <h4 className="text-3xl font-semibold">
+            <p className="text-3xl font-semibold">
               Cal<span className="text-primary">ender</span>
-            </h4>
+            </p>
           </DialogTitle>
           <DialogDescription className="text-center">
             Login with your preferred method
