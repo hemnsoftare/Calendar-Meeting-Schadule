@@ -17,9 +17,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-const RootLayout = async ({ childern }: { childern: ReactNode }) => {
+import prisma from "../lib/db";
+import { redirect } from "next/navigation";
+
+const getDate = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: { userName: true, grantId: true },
+  });
+  if (!data?.userName) return redirect("/onboarding");
+  if (!data?.grantId) return redirect("/onboarding/grant-id");
+
+  return data;
+};
+
+const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
   console.log(session);
+  const data = await getDate(session?.user?.id as string);
+  console.log(data);
   return (
     <>
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -100,8 +118,10 @@ const RootLayout = async ({ childern }: { childern: ReactNode }) => {
               </DropdownMenu>
             </div>
           </header>
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            {children}
+          </main>
         </div>
-        {childern}
       </div>
     </>
   );

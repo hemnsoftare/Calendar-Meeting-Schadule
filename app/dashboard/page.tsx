@@ -1,11 +1,8 @@
 import React from "react";
-import { requireUser } from "../lib/hook";
 import { redirect } from "next/navigation";
 import { signOut } from "../lib/auth";
 
 const page = async () => {
-  const sission = await requireUser();
-  console.log(sission.expires);
   return (
     <div>
       <form
@@ -19,6 +16,7 @@ const page = async () => {
           Logout
         </button>
       </form>
+      <h1>dashboade in here </h1>
     </div>
   );
 };
