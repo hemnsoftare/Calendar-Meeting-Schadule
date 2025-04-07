@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "../components/dashboard/ThemeToggle";
+import { Toaster } from "@/components/ui/sonner";
 
-import { auth, signOut } from "../lib/auth";
+import { signOut } from "../lib/auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,22 +20,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import prisma from "../lib/db";
 import { redirect } from "next/navigation";
+import { requireUser } from "../lib/hook";
 
 const getDate = async (userId: string) => {
-  const data = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: { userName: true, grantId: true },
-  });
-  if (!data?.userName) return redirect("/onboarding");
-  if (!data?.grantId) return redirect("/onboarding/grant-id");
+  try {
+    const data = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: { userName: true, grantId: true },
+    });
+    if (!data?.userName) return redirect("/onboarding");
+    if (!data?.grantId) return redirect("/onboarding/grant-id");
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error("Database query error:", error);
+    // Consider disconnecting and reconnecting to clear prepared statements
+    // await prisma.$disconnect();
+    // await prisma.$connect();
+    throw error;
+  }
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth();
+  const session = await requireUser();
   console.log(session);
   const data = await getDate(session?.user?.id as string);
   console.log(data);
@@ -123,6 +133,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           </main>
         </div>
       </div>
+      <Toaster richColors closeButton />
     </>
   );
 };
