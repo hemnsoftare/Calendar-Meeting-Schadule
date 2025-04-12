@@ -24,7 +24,7 @@ import { requireUser } from "../lib/hook";
 
 const getDate = async (userId: string) => {
   try {
-    const data = await prisma.user.findUnique({
+    const data = await prisma?.user?.findUnique({
       where: {
         id: userId,
       },
@@ -45,7 +45,6 @@ const getDate = async (userId: string) => {
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   const session = await requireUser();
-  console.log(session);
   const data = await getDate(session?.user?.id as string);
   console.log(data);
   return (

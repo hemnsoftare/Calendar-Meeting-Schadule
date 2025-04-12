@@ -47,6 +47,7 @@ export default function AuthModal() {
         >
           <GoogleAuthButton />
         </form>
+
         <form
           action={async () => {
             "use server";
