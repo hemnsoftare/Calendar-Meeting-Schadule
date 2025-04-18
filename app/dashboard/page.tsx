@@ -5,15 +5,7 @@ import prisma from "../lib/db";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EmptyState } from "../components/dashboard/EmptyState";
-import {
-  ExternalLink,
-  Link2,
-  MoreVertical,
-  Pen,
-  Settings,
-  Trash,
-  User2,
-} from "lucide-react";
+import { ExternalLink, Link2, Pen, Settings, Trash, User2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import {
   DropdownMenu,
